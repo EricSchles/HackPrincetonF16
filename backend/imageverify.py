@@ -118,7 +118,7 @@ def verified_links( url ):
     """
     Use's Web of Trust's API to detect untrustworthy web addresses.
     """
-    Check if web address
+    #Check if web address
     import requests
     mywot_api_endpoint = "http://api.mywot.com/0.4/public_link_json2"
     #add_website_here = "https://www.ncbi.nlm.nih.gov/pubmed/26389314"

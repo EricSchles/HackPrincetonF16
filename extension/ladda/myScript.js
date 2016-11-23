@@ -16,9 +16,23 @@ var feeds = new Set();
  *
  * @param the text or url to send to the server.
  */
+
+
+
+function postData(){
+    alert("got inside function");
+    var server = "http://localhost:5000/get_data"
+    $.post(server, {
+	data: "hello"
+    }, function(data){
+    	alert("sent data");
+    });    
+}
+
 function httpGet(input, type, data) {
 
-	var server = "https://fbserve.herokuapp.com/";
+    var server = "http://localhost:5000";
+	//"https://fbserve.herokuapp.com/";
 	var contents = "?content=";
 	
 	var page;
@@ -30,7 +44,7 @@ function httpGet(input, type, data) {
     //debugger;
 	console.log(page);
 
-	var theUrl = server + contents + page;
+	/*var theUrl = server + contents + page;
 	theUrl = theUrl.replace("&", "^");
 
 	fetch(theUrl)
@@ -48,7 +62,7 @@ function httpGet(input, type, data) {
 				if(text=="verified") div.style = "front-weight:bold; padding: 3px; position:absolute; top: 4px; right: 30px;background: #3b5998; font-size: 15px; color: #D5F5E3;";
 				else div.style = "front-weight:bold; padding: 3px; position:absolute; top: 4px; right: 30px;background: #3b5998; font-size: 15px; color: #E74C3C;";
 		});
-}
+*/}
 
 /*
  * Parse through Facebook's encoded url for the actual url
@@ -79,7 +93,9 @@ function decode(code) {
  *
  */
 setInterval(function() {
-	
+	console.log("whatever");
+    postData();
+    console.log("whatever else");
 	var test = document.getElementsByClassName('_4-u2 mbm _5v3q _4-u8');
 
 	for(var i=0; i<test.length; i++) {
@@ -88,6 +104,7 @@ setInterval(function() {
 
 		// Check if feed needs to be modified
 
+	    //feeds object should be handled on the database side, instead of on the browser side
 		if(!feeds.has(data)) {
 			feeds.add(data);
 
@@ -95,25 +112,26 @@ setInterval(function() {
 
 			var statement = "";
 
-			var processed = false;
+			//var processed = false;
 
 			
 			var linked = test[i].querySelector('._6ks');
-			if(!processed && linked != null && linked.querySelector('a')!=undefined) {
-				//console.log(linked.querySelector('a'));
-				httpGet(linked.querySelector('a').href, "url", data);
-				processed = false;
+			//if(!processed && linked != null && linked.querySelector('a')!=undefined) {
+			if(linked != null && linked.querySelector('a')!=undefined) {
+			    //console.log(linked.querySelector('a'));
+		            httpGet(linked.querySelector('a').href, "url", data);
 			}
 
 	
 			var link = test[i].querySelector('._5pbx.userContent');
-			if(!processed && link != null && link.querySelector('a') != null && link.querySelector('a').href!=undefined) {
-				//console.log(link);
-				httpGet(link.href, "url", data);
+			//if(!processed && link != null && link.querySelector('a') != null && link.querySelector('a').href!=undefined) {
+		        if(link != null && link.querySelector('a') != null && link.querySelector('a').href!=undefined) {
+  		            //console.log(link);
+		            httpGet(link.href, "url", data);
 			}
             
 
-			var picComment = test[i].querySelector('.uiScaledImageContainer._4-ep');
+			/*var picComment = test[i].querySelector('.uiScaledImageContainer._4-ep');
 
 			if(picComment != null && picComment.querySelector('img') != undefined && picComment.querySelector('img').src!=undefined) {
 
@@ -128,9 +146,10 @@ setInterval(function() {
 				httpGet(picPost.querySelector('img').src, "image", data);
 				processed = false;
 			}
-			
+			*/
 			var text = test[i].querySelector('._5pbx.userContent');
-			if(!processed && text != null && text.textContent!=undefined) {
+		        //if(!processed && text != null && text.textContent!=undefined) {
+		        if(text != null && text.textContent!=undefined) {
 				//console.log(text);
 				httpGet(text.textContent, "text", data);
 				processed = false;
